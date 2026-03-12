@@ -43,8 +43,8 @@ fn main() {
 /// assert_eq!(add(2, 3), 5);
 /// assert_eq!(add(-1, 1), 0);
 /// ```
-fn add(_a: i32, _b: i32) -> i32 {
-    todo!("Implement add")
+fn add(a: i32, b: i32) -> i32 {
+    a + b
 }
 
 /// Returns the product of `a` and `b`.
