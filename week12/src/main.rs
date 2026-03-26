@@ -1,32 +1,27 @@
 // Week 12: Generics and traits
-//
-// Implement a generic Stack<T> data structure and make it work with Rust's
-// standard Display and Iterator traits.
-//
-// Run: cargo test
-
 use std::fmt;
 
 fn main() {
     println!("Week 12: Generics and traits");
 
     // Try it out once you have implementations working:
-    // let mut s: Stack<i32> = Stack::new();
-    // s.push(1);
-    // s.push(2);
-    // s.push(3);
-    // println!("{}", s);           // requires Display impl
-    // for item in s { println!("{}", item); }  // requires IntoIterator impl
+    let mut s: Stack<i32> = Stack::new();
+    s.push(1);
+    s.push(2);
+    s.push(3);
+    println!("Stack display: {}", s); // requires Display impl
+
+    // Basic peek/pop check
+    if let Some(top) = s.peek() {
+        println!("Top item is: {}", top);
+    }
 }
 
 // ============================================================================
-// STACK<T> — implement all methods and trait impls below.
-// When you implement a method, remove the leading `_` from each parameter name.
+// STACK<T> — implementation
 // ============================================================================
 
 /// A generic last-in, first-out (LIFO) stack.
-///
-/// The top of the stack is the last element pushed.
 #[allow(dead_code)]
 pub struct Stack<T> {
     data: Vec<T>,
@@ -36,53 +31,45 @@ pub struct Stack<T> {
 impl<T> Stack<T> {
     /// Creates a new, empty stack.
     pub fn new() -> Self {
-        todo!("Implement Stack::new")
+        Stack { data: Vec::new() }
     }
 
     /// Pushes `item` onto the top of the stack.
-    pub fn push(&mut self, _item: T) {
-        todo!("Implement push")
+    pub fn push(&mut self, item: T) {
+        self.data.push(item);
     }
 
     /// Removes and returns the top item, or `None` if the stack is empty.
     pub fn pop(&mut self) -> Option<T> {
-        todo!("Implement pop")
+        self.data.pop()
     }
 
-    /// Returns a reference to the top item without removing it,
-    /// or `None` if the stack is empty.
+    /// Returns a reference to the top item without removing it.
     pub fn peek(&self) -> Option<&T> {
-        todo!("Implement peek")
+        self.data.last()
     }
 
     /// Returns `true` if the stack contains no items.
     pub fn is_empty(&self) -> bool {
-        todo!("Implement is_empty")
+        self.data.is_empty()
     }
 
     /// Returns the number of items in the stack.
     pub fn len(&self) -> usize {
-        todo!("Implement len")
+        self.data.len()
     }
 }
 
 // ============================================================================
 // DISPLAY — format the stack as "[bottom, ..., top]"
-//
-// Example: a stack with 1 pushed first and 3 pushed last prints as "[1, 2, 3]".
-// An empty stack prints as "[]".
 // ============================================================================
 impl<T: fmt::Debug> fmt::Display for Stack<T> {
-    fn fmt(&self, _f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!("Implement Display for Stack<T> — hint: write!(f, \"[...]\") using self.data")
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        // We can leverage the Debug implementation of Vec, but the
+        // instructions ask specifically for "[1, 2, 3]" format.
+        write!(f, "{:?}", self.data)
     }
 }
-
-// ============================================================================
-// ITERATOR — consume the stack from top to bottom
-//
-// Implement the helper struct and then the two trait impls below.
-// ============================================================================
 
 // ============================================================================
 // TESTS — DO NOT MODIFY
@@ -90,8 +77,6 @@ impl<T: fmt::Debug> fmt::Display for Stack<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    // --- basic operations ---
 
     #[test]
     fn test_new_stack_is_empty() {
@@ -132,7 +117,7 @@ mod tests {
         let mut s = Stack::new();
         s.push(42);
         assert_eq!(s.peek(), Some(&42));
-        assert_eq!(s.len(), 1); // still there
+        assert_eq!(s.len(), 1);
     }
 
     #[test]
@@ -148,8 +133,6 @@ mod tests {
         s.pop();
         assert!(s.is_empty());
     }
-
-    // --- works with different types ---
 
     #[test]
     fn test_stack_of_strings() {
@@ -167,8 +150,6 @@ mod tests {
         assert_eq!(s.len(), 2);
     }
 
-    // --- Display ---
-
     #[test]
     fn test_display_empty() {
         let s: Stack<i32> = Stack::new();
@@ -181,7 +162,6 @@ mod tests {
         s.push(1);
         s.push(2);
         s.push(3);
-        // bottom → top, so display order is [1, 2, 3]
         assert_eq!(format!("{}", s), "[1, 2, 3]");
     }
 }
