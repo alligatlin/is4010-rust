@@ -61,7 +61,11 @@ fn is_even(n: i32) -> bool {
 
 /// Returns the larger of `a` and `b`.
 fn max(a: i32, b: i32) -> i32 {
-    if a > b { a } else { b }
+    if a > b {
+        a
+    } else {
+        b
+    }
 }
 
 // ============================================================================
@@ -281,6 +285,6 @@ mod tests {
 
     #[test]
     fn test_count_evens_negative() {
-        assert_eq!(count_evens(&[-2, -1, 0, 1, 2]), 3); 
+        assert_eq!(count_evens(&[-2, -1, 0, 1, 2]), 3);
     }
 }
